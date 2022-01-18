@@ -1,206 +1,294 @@
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
-void buff_clr(void)
-{
-    char junk;
-    do{
-        junk=getchar();
-    }while(junk!='\n');
-}
-
-struct coord
-{
-    int y;
-    int x;
-
-}coords;
-
-int randgen(int **ships_ptr,int n)
-{
-    int i,j,count=0;
-    srand((unsigned)time(NULL));
-    for(i=0;i<n;i++)
-    {
-        for(j=0;j<n;j++)
-        {
-            ships_ptr[i][j]=rand()%2;
-            if(ships_ptr[i][j]==1)
-            {
-                count++;
+#define ROWS 10
+#define COLS 10
+void main(){
+    int num , i=1,sport[ROWS][COLS],j,x,y;
+    printf("************************************\n");
+    printf("************************************\n");
+    printf("*******THE BATTTLESHIP GAME*********\n");
+    printf("************************************\n");
+    printf("************************************\n");
+    printf("Elige el Nivel\n");
+    printf("1.Facil\n");
+    printf("2.Dificil\n");
+    printf("3.Muy Dificil\n");
+    printf("0.Salir.\n");
+    scanf("%d",&num);
+   if( num > 3 ){
+        while (i < 3){
+            printf("1.Facl\n");
+            printf("2.Dificil\n");
+            printf("3.Muy Dificil\n");
+            printf("0.Salir.\n");
+            scanf("%d",&num);
+            i += 1;
+        }
+    }
+    
+    switch(num){
+        case 1 :
+            for(i=1;i <= ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		               
+		                sport[i][j]=0;
+		                
+		         }
             }
-        }
-    }
-    return count;
-}
-void draw_gui(char **pseudo_gui_ptr,int n)
-{
-    int i,j;
-
-    pseudo_gui_ptr[0][0]=' ';
-    for(i=1;i<(n+1);i++)
-    {
-        pseudo_gui_ptr[0][i]=i+48;
-        pseudo_gui_ptr[i][0]=i+48;
-    }
-
-    for(i=1;i<(n+1);i++)
-     {
-        for(j=1;j<(n+1);j++)
-        {
-            pseudo_gui_ptr[i][j]='+';
-        }
-    }
-}
-void battle(int **ships_ptr, char **pseudo_gui_ptr,int n, struct coord x,int* count,int* miss)
-{
-
-    int i,j;
-
-     for(i=0;i<n;i++)
-        {
-            for(j=0;j<n;j++)
-            {
-                if(x.x-1 == i && x.y-1 == j)
-                {
-                    if(ships_ptr[i][j]==1)
-                    {
-                        if(pseudo_gui_ptr[i+1][j+1]=='O')
-                        {
-                            printf("\nYou've already uncovered this field!\n");
-                            break;
-                        }
-                        printf("\nHit!\n");
-                        pseudo_gui_ptr[i+1][j+1]='O';
-                        (*count)--;
-                    }
-                    else
-                    {
-                        if(pseudo_gui_ptr[i+1][j+1]=='X')
-                        {
-                            printf("\nYou've already uncovered this field!\n\n");
-                            break;
-                        }
-                        printf("\nMiss!\n");
-                        pseudo_gui_ptr[i+1][j+1]='X';
-                        (*miss)++;
-                    }
-
+            // La tabla
+            printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+            for(i=1;i<=ROWS;i++){
+                printf("%d",i);
+		        for(j=1;j<=COLS;j++){
+		            printf("\t[ ]");
+		        }
+		        printf("\n");
+            }
+            
+            // Posicion barco
+            for(i=1;i<=ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		            if (sport[i][j]== 0 ){
+		                sport[3][3]=1;
+		                sport[4][3]=1;
+		                sport[5][3]=1;
+		                sport[3][5]=1;
+		                sport[3][6]=1;
+		                sport[2][9]=1;
+		                sport[3][9]=1;
+		                sport[4][9]=1;
+		                sport[6][5]=1;
+		                sport[6][6]=1;
+		                sport[6][7]=1;
+		                sport[6][8]=1;
+		                sport[9][3]=1;
+		                sport[9][4]=1;
+		                sport[9][5]=1;
+		                sport[9][6]=1;
+		                sport[9][7]=1;
+		                
+		                
+		            }
+		        }
+            }
+            
+            // Preguntar al usuario un numero del 1 al 10 para hundir un barco
+            do {
+                printf("Entra una fila del 1 al 10 :");
+                scanf("%d",&i);
+            }while(i < 1 || i > 10);
+            do {
+                printf("Entra una fila del 1 al 10 :");
+                scanf("%d",&j);
+            }while(j < 1 || j > 10);
+            
+            // Si el usuario falla enseñar el tablero donde ha fallado
+            if (sport[i][j]==0){
+                printf("No has hundido ningun barco\n");
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(i=1;i<=ROWS;i++){
+                    printf("%d",i);
+		            for(j=1;j<=COLS;j++){
+		                printf("\t[ ]");
+		            }
+		            printf("\n");
+                }
+            //Si el usuario ha hunddo un barco en señar el tablero 
+            }else if (sport[i][j]==1) {
+                printf("Has hundido un barco y has ganado! \n)");
+                sport[i][j]=2;
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(x=1;x<=ROWS;x++){
+                    printf("%d",x);
+		            for(y=1;y<=COLS;y++){
+		            
+		                if (sport[x][y]== 2){
+		                    printf("\t[*]");
+		                }else {
+		                    printf("\t[ ]");
+		                }
+		            
+		            }
+		            printf("\n");
                 }
             }
-        }
-
-
-}
-void result(char **pseudo_gui_ptr,int n)
-{
-    int i,j;
-
-    for(i=0;i<(n+1);i++)
-    {
-        for(j=0;j<(n+1);j++)
-        {
-            printf("%6c",pseudo_gui_ptr[i][j]);
-        }
-        printf("\n\n");
+            
+            
+            break ;
+        case 2 :
+            
+            for(i=1;i <= ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		               
+		                sport[i][j]=0;
+		                
+		         }
+            }
+            printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+            for(i=1;i<=ROWS;i++){
+                printf("%d",i);
+		        for(j=1;j<=COLS;j++){
+		            printf("\t[ ]");
+		        }
+		        printf("\n");
+            }
+            
+            for(i=1;i<=ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		            if (sport[i][j]== 0 ){
+		                sport[3][3]=1;
+		                sport[4][3]=1;
+		                sport[5][3]=1;
+		                sport[3][5]=1;
+		                sport[3][6]=1;
+		                sport[2][9]=1;
+		                sport[3][9]=1;
+		                sport[4][9]=1;
+		                sport[6][5]=1;
+		                sport[6][6]=1;
+		                sport[6][7]=1;
+		                sport[6][8]=1;
+		                sport[9][3]=1;
+		                sport[9][4]=1;
+		                sport[9][5]=1;
+		                sport[9][6]=1;
+		                sport[9][7]=1;
+		                
+		                
+		            }
+		        }
+            }
+            
+            do {
+                printf("Entra una fila del 1 al 10 :");
+                scanf("%d",&i);
+            }while(i < 1 || i > 10);
+            do {
+                printf("Entra una columna del 1 al 10 :");
+                scanf("%d",&j);
+            }while(j < 1 || j > 10);
+            
+            if (sport[i][j]==0){
+                printf("No has hundido ningun barco\n");
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(i=1;i<=ROWS;i++){
+                    printf("%d",i);
+		            for(j=1;j<=COLS;j++){
+		                printf("\t[ ]");
+		            }
+		            printf("\n");
+                }
+            }else if (sport[i][j]==1) {
+                printf("Has hundido un barco y has ganado! \n)");
+                sport[i][j]=2;
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(x=1;x<=ROWS;x++){
+                    printf("%d",x);
+		            for(y=1;y<=COLS;y++){
+		            
+		                if (sport[x][y]== 2){
+		                    printf("\t[*]");
+		                }else {
+		                    printf("\t[ ]");
+		                }
+		            
+		            }
+		            printf("\n");
+                }
+            }
+            
+            break;
+        case 3 :
+            for(i=1;i <= ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		               
+		                sport[i][j]=0;
+		                
+		         }
+            }
+            printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+            for(i=1;i<=ROWS;i++){
+                printf("%d",i);
+		        for(j=1;j<=COLS;j++){
+		            printf("\t[ ]");
+		        }
+		        printf("\n");
+            }
+            
+            for(i=1;i<=ROWS;i++){
+		        for(j=1;j<=COLS;j++){
+		            if (sport[i][j]== 0 ){
+		                sport[3][3]=1;
+		                sport[4][3]=1;
+		                sport[5][3]=1;
+		                sport[3][5]=1;
+		                sport[3][6]=1;
+		                sport[2][9]=1;
+		                sport[3][9]=1;
+		                sport[4][9]=1;
+		                sport[6][5]=1;
+		                sport[6][6]=1;
+		                sport[6][7]=1;
+		                sport[6][8]=1;
+		                sport[9][3]=1;
+		                sport[9][4]=1;
+		                sport[9][5]=1;
+		                sport[9][6]=1;
+		                sport[9][7]=1;
+		                
+		                
+		            }
+		        }
+            }
+            
+            do {
+                printf("Entra una fila del 1 al 10 :");
+                scanf("%d",&i);
+            }while(i < 1 || i > 10);
+            do {
+                printf("Entra una columna del 1 al 10 :");
+                scanf("%d",&j);
+            }while(j < 1 || j > 10);
+            
+            if (sport[i][j]==0){
+                printf("No has hundido ningu barco\n");
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(i=1;i<=ROWS;i++){
+                    printf("%d",i);
+		            for(j=1;j<=COLS;j++){
+		                printf("\t[ ]");
+		            }
+		            printf("\n");
+                }
+            }else if (sport[i][j]==1) {
+                printf("Has hundido un barco y has ganado! \n)");
+                sport[i][j]=2;
+                
+                printf("\tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\n");
+                for(x=1;x<=ROWS;x++){
+                    printf("%d",x);
+		            for(y=1;y<=COLS;y++){
+		            
+		                if (sport[x][y]== 2){
+		                    printf("\t[*]");
+		                }else {
+		                    printf("\t[ ]");
+		                }
+		            
+		            }
+		            printf("\n");
+                }
+            }
+            
+            break;
+        case 0 :
+            printf("Has salido del juego");
+            
     }
-}
-int main(){
-
-   int **ships;
-   char **pseudo_gui;
-   int i,j;
-   int n;
-   char switch_size,switch_difficulty;
-   int difficulty=0;
-   int shipcount=0;
-   int x_count=0;
-
-
-   printf("\t\t\tSink the ships v0.1b");
-
-   printf("\nChoose size(S,M,L):");
-   scanf("%c",&switch_size);
-    buff_clr();
-
-      switch(switch_size)
-   {
-       case 's':
-       case 'S':n=3;break;
-       case 'm':
-       case 'M':n=5;break;
-       case 'l':
-       case 'L':n=8;break;
-       default:printf("\nYou've choosen poorly!");
-        getch();
-               exit(EXIT_FAILURE);
-   }
-
-   printf("\nChoose difficulty(E,H):");
-   scanf("%c",&switch_difficulty);
-   buff_clr();
-
-   switch(switch_difficulty)
-   {
-       case 'e':
-       case 'E':difficulty=(n*2)-2;break;
-       case 'h':
-       case 'H':difficulty=(n/2);break;
-       default:printf("\nYou've choosen poorly!");
-               getch();
-               exit(EXIT_FAILURE);
-   }
-
-   ships=(int**)malloc(n*sizeof(int*));
-
-   for(i=0;i<n;i++)
-   {
-       ships[i]=(int*)malloc(n*sizeof(int));
-   }
-
-   pseudo_gui=(char**)malloc((n+1)*sizeof(char*));
-
-   for(i=0;i<(n+1);i++)
-   {
-       pseudo_gui[i]=(char*)malloc((n+1)*sizeof(char));
-   }
-
-   shipcount=randgen(ships,n);
-
-   printf("\n\nNumber of ships to be sunk:%d",shipcount);
-   printf("\nNumber of misses allowed: %d\n\n",difficulty);
-
-   draw_gui(pseudo_gui,n);
-   result(pseudo_gui,n);
-
-   while(shipcount!=0 && x_count!=difficulty)
-   {
-
-   printf("\nEnter coordinates (x,y):");
-   scanf("%d,%d",&coords.x,&coords.y);
-   buff_clr();
-    system("cls");
-
-   battle(ships,pseudo_gui,n,coords,&shipcount,&x_count);
-   result(pseudo_gui,n);
-
-   printf("Number of ships to be sunk:%d",shipcount);
-   printf("\nNumber of misses(out of %d): %d\n\n",difficulty,x_count);
-
-   }
-   if(shipcount==0)
-   {
-       printf("\nWinner!\n\n");
-       getch();
-   }
-   else if(x_count==difficulty)
-   {
-       printf("\nYou Lose!\n\n");
-       getch();
-   }
-
-
-  return 0;
+    
 }
